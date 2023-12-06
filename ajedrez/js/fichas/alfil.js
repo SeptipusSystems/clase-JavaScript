@@ -16,20 +16,6 @@ class alfil extends ficha {
     casilla.appendChild(img);
   }
 
-  hayFichaPosicion(tablero, posibles, i, j) {
-    if (tablero[i][j] != 0) {
-      let ficha = tablero[i][j];
-      console.log(ficha);
-      //if (ficha.color != this.color) {
-      posibles.push([i, j]);
-      // }
-      return true;
-    } else {
-      posibles.push([i, j]);
-    }
-    return false;
-  }
-
   posiblesMovimientos(tablero) {
     let posibles = [];
     let i = this.posicion[0];
@@ -40,20 +26,17 @@ class alfil extends ficha {
     let menosmenos = true;
 
     for (let x = 1; x <= 7; x++) {
-      if (this.hayFichaPosicion(tablero, posibles, i + x, j + x) || masmas) {
-        masmas = false;
+      if (masmas) {
+        masmas = this.hastaEstaFicha(tablero, posibles, i + x, j + x);
       }
-      if (this.hayFichaPosicion(tablero, posibles, i + x, j - x) || masmenos) {
-        masmenos = false;
+      if (masmenos) {
+        masmenos = this.hastaEstaFicha(tablero, posibles, i + x, j - x);
       }
-      if (this.hayFichaPosicion(tablero, posibles, i - x, j + x) || menosmas) {
-        menosmas = false;
+      if (menosmas) {
+        menosmas = this.hastaEstaFicha(tablero, posibles, i - x, j + x);
       }
-      if (
-        this.hayFichaPosicion(tablero, posibles, i - x, j - x) ||
-        menosmenos
-      ) {
-        menosmenos = false;
+      if (menosmenos) {
+        menosmenos = this.hastaEstaFicha(tablero, posibles, i - x, j - x);
       }
     }
     return this.estaDentroTablero(posibles);

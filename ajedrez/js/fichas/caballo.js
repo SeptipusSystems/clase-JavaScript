@@ -16,18 +16,16 @@ class caballo extends ficha {
     casilla.appendChild(img);
   }
 
-  posiblesMovimientos() {
+  posiblesMovimientos(tablero) {
     let posibles = [];
     let i = this.posicion[0];
     let j = this.posicion[1];
     const desplazamientos = [-2, -1, 1, 2];
 
-    desplazamientos.forEach((desplazamientoFila) => {
-      desplazamientos.forEach((desplazamientoColumna) => {
-        if (Math.abs(desplazamientoFila) !== Math.abs(desplazamientoColumna)) {
-          const nuevaFila = i + desplazamientoFila;
-          const nuevaColumna = j + desplazamientoColumna;
-          posibles.push([nuevaFila, nuevaColumna]);
+    desplazamientos.forEach((x) => {
+      desplazamientos.forEach((y) => {
+        if (Math.abs(x) !== Math.abs(y)) {
+          this.hastaEstaFicha(tablero, posibles, i + x, j + y);
         }
       });
     });

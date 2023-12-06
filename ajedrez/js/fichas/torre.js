@@ -15,4 +15,30 @@ class torre extends ficha {
     }
     casilla.appendChild(img);
   }
+
+  posiblesMovimientos(tablero) {
+    let posibles = [];
+    let i = this.posicion[0];
+    let j = this.posicion[1];
+    let imas = true;
+    let imenos = true;
+    let jmas = true;
+    let jmenos = true;
+
+    for (let x = 1; x <= 7; x++) {
+      if (jmas) {
+        jmas = this.hastaEstaFicha(tablero, posibles, i, j + x);
+      }
+      if (jmenos) {
+        jmenos = this.hastaEstaFicha(tablero, posibles, i, j - x);
+      }
+      if (imas) {
+        imas = this.hastaEstaFicha(tablero, posibles, i + x, j);
+      }
+      if (imenos) {
+        imenos = this.hastaEstaFicha(tablero, posibles, i - x, j);
+      }
+    }
+    return this.estaDentroTablero(posibles);
+  }
 }

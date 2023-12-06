@@ -17,21 +17,16 @@ class tablero {
       }
     }
 
-    /* let tablero = [];
-    for (let i = 0; i < 8; i++) {
-      tablero[i] = [];
-      for (let j = 0; j < 8; j++) {
-        tablero[i][j] = this.ficha(i, j);
-      }
-    }*/
+    this.tablero = this.rellenar();
+    this.turno = "B"; //Turno de las Blancas(B) o de las fichas Negras(N)
+  }
+
+  rellenar() {
     let tablero = Array.from({ length: 8 }, (_, i) =>
       Array.from({ length: 8 }, (_, j) => this.ficha(i, j))
     );
-
     console.log(tablero);
-
-    this.tablero = tablero;
-    this.turno = "B"; //Turno de las Blancas(B) o de las fichas Negras(N)
+    return tablero;
   }
 
   cargarFicha(tipo, color, posicion = [0, 0]) {
@@ -78,9 +73,9 @@ class tablero {
       [0, 0, "T"],
       [0, 7, "T"],
       [0, 1, "C"],
-      [4, 4, "C"],
+      [0, 6, "C"],
       [0, 2, "A"],
-      [4, 5, "A"],
+      [0, 5, "A"],
       [0, 3, "R"],
       [0, 4, "Q"],
       [1, 0, "P"],
@@ -143,6 +138,26 @@ class tablero {
     //Casilla id
     const i = parseInt(cid.charAt(1));
     const j = parseInt(cid.charAt(2));
-    return this.tablero[i][j].posiblesMovimientos(this.tablero);
+    this.ficha = this.tablero[i][j];
+    return this.ficha.posiblesMovimientos(this.tablero);
+  }
+
+  borrarFicha(i, j) {
+    let cid = "c" + i + j;
+    let casilla = document.getElementById(cid);
+    casilla.textContent = "";
+  }
+
+  mover(ficha, i, j) {
+    let x = ficha.posicion[0];
+    let y = ficha.posicion[1];
+    this.tablero[x][y] = 0;
+    this.borrarFicha(x, y);
+
+    this.tablero[i][j] = ficha;
+    ficha.posicion = [i, j];
+
+    ficha.pintarEnTablero();
+    console.log(this.tablero);
   }
 }

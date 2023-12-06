@@ -17,6 +17,7 @@ class ficha {
 
   posiblesMovimientos() {
     console.log("No hay movimientos para la subcalse" + this.tipo);
+    return [];
   }
 
   verificarCoordenadas(i, j) {
@@ -28,10 +29,34 @@ class ficha {
     posibles.forEach((coo) => {
       const i = coo[0];
       const j = coo[1];
-      if (i >= 0 && i <= 7 && j >= 0 && j <= 7) {
+      if (this.dentroTablero(i, j)) {
         nposibles.push([i, j]);
       }
     });
     return nposibles;
+  }
+
+  dentroTablero(i, j) {
+    return i >= 0 && i <= 7 && j >= 0 && j <= 7;
+  }
+
+  hayFichaPosicion(tablero, i, j) {
+    if (this.dentroTablero(i, j)) {
+      return tablero[i][j] != 0;
+    }
+    return false;
+  }
+
+  hastaEstaFicha(tablero, posibles, i, j) {
+    if (this.hayFichaPosicion(tablero, i, j)) {
+      let ficha = tablero[i][j];
+      if (ficha.color != this.color) {
+        posibles.push([i, j]);
+      }
+      return false;
+    } else {
+      posibles.push([i, j]);
+    }
+    return true;
   }
 }

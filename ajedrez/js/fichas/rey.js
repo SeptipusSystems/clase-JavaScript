@@ -15,4 +15,19 @@ class rey extends ficha {
     }
     casilla.appendChild(img);
   }
+
+  posiblesMovimientos(tablero) {
+    let posibles = [];
+    let i = this.posicion[0];
+    let j = this.posicion[1];
+
+    [-1, 0, 1].forEach((x) => {
+      [-1, 0, 1].forEach((y) => {
+        if (x != 0 || y != 0) {
+          this.hastaEstaFicha(tablero, posibles, i + x, j + y);
+        }
+      });
+    });
+    return this.estaDentroTablero(posibles);
+  }
 }
