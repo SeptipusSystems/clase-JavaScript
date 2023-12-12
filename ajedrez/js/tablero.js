@@ -1,35 +1,41 @@
-class tablero {
-  constructor(contenedor) {
-    // Crear una matriz de 8 por 8 llena de valores iniciales (por ejemplo, ceros)
-    //
-    for (let i = 0; i < 8; i++) {
-      for (let j = 0; j < 8; j++) {
-        const nuevoElemento = document.createElement("div");
-        nuevoElemento.classList.add("casilla");
-        if ((i + j) % 2 == 0) {
-          nuevoElemento.classList.add("blanca");
-        } else {
-          nuevoElemento.classList.add("negra");
-        }
-        nuevoElemento.id = "c" + i + j;
-        nuevoElemento.textContent = "c" + i + j;
-        contenedor.appendChild(nuevoElemento);
-      }
-    }
+import { Peon } from "./fichas/peon.js";
+import { Torre } from "./fichas/torre.js";
+import { Alfil } from "./fichas/alfil.js";
+import { Caballo } from "./fichas/caballo.js";
+import { Rey } from "./fichas/rey.js";
+import { Reina } from "./fichas/reina.js";
 
-    this.tablero = this.rellenar();
+export class Tablero {
+  constructor(contenedor) {
+    this.generarTablero();
+    this.rellenar(contenedor);
     this.turno = "B"; //Turno de las Blancas(B) o de las fichas Negras(N)
   }
 
-  rellenar() {
-    let tablero = Array.from({ length: 8 }, (_, i) =>
-      Array.from({ length: 8 }, (_, j) => this.ficha(i, j))
+  rellenar(contenedor) {
+    // Crear una matriz de 8 por 8 llena de valores iniciales (por ejemplo, ceros)
+    this.tablero = Array.from({ length: 8 }, (_, i) =>
+      Array.from({ length: 8 }, (_, j) => this.cargar(contenedor, i, j))
     );
-    console.log(tablero);
-    return tablero;
+    console.log(this.tablero);
   }
 
-  cargarFicha(tipo, color, posicion = [0, 0]) {
+  cargarcasilla(contenedor, posicion) {
+    const i = posicion[0];
+    const j = posicion[1];
+    const nuevoElemento = document.createElement("div");
+    nuevoElemento.classList.add("casilla");
+    if ((i + j) % 2 == 0) {
+      nuevoElemento.classList.add("blanca");
+    } else {
+      nuevoElemento.classList.add("negra");
+    }
+    nuevoElemento.id = "c" + i + j;
+    nuevoElemento.textContent = "c" + i + j;
+    contenedor.appendChild(nuevoElemento);
+  }
+
+  cargarFicha(contenedor, tipo, color, posicion = [0, 0]) {
     /*
        P: "peon",
        T: "torre",
@@ -38,108 +44,84 @@ class tablero {
        R: "rey",
        Q: "reina",
      */
-    let ficha;
+    this.cargarcasilla(contenedor, posicion);
+    let ficha = 0;
     switch (tipo) {
       case "P":
       case "p":
-        ficha = new peon(color, posicion);
+        ficha = new Peon(color, posicion);
         break;
       case "C":
       case "c":
-        ficha = new caballo(color, posicion);
+        ficha = new Caballo(color, posicion);
         break;
       case "A":
       case "a":
-        ficha = new alfil(color, posicion);
+        ficha = new Alfil(color, posicion);
         break;
       case "T":
       case "t":
-        ficha = new torre(color, posicion);
+        ficha = new Torre(color, posicion);
         break;
       case "R":
       case "r":
-        ficha = new rey(color, posicion);
+        ficha = new Rey(color, posicion);
         break;
       case "Q":
       case "q":
-        ficha = new reina(color, posicion);
+        ficha = new Reina(color, posicion);
         break;
     }
     return ficha;
   }
 
-  ficha(i, j) {
-    let blancas = [
-      [0, 0, "T"],
-      [0, 7, "T"],
-      [0, 1, "C"],
-      [0, 6, "C"],
-      [0, 2, "A"],
-      [0, 5, "A"],
-      [0, 3, "R"],
-      [0, 4, "Q"],
-      [1, 0, "P"],
-      [1, 1, "P"],
-      [1, 2, "P"],
-      [1, 3, "P"],
-      [1, 4, "P"],
-      [1, 5, "P"],
-      [1, 6, "P"],
-      [1, 7, "P"],
+  generarTablero() {
+    this.tablero = [
+      ["T", "C", "A", "Q", "R", "A", "C", "T"],
+      ["P", "P", "P", "P", "P", "P", "P", "P"],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      ["p", "p", "p", "p", "p", "p", "p", "p"],
+      ["t", "c", "a", "q", "r", "a", "c", "t"],
     ];
-    let negras = [
-      [7, 0, "t"],
-      [7, 7, "t"],
-      [7, 1, "c"],
-      [7, 6, "c"],
-      [7, 2, "a"],
-      [7, 5, "a"],
-      [7, 3, "r"],
-      [7, 4, "q"],
-      [6, 0, "p"],
-      [6, 1, "p"],
-      [6, 2, "p"],
-      [6, 3, "p"],
-      [6, 4, "p"],
-      [6, 5, "p"],
-      [6, 6, "p"],
-      [6, 7, "p"],
-    ];
-    for (let k = 0; k < 16; k++) {
-      if (blancas[k][0] == i && blancas[k][1] == j) {
-        let tipo = blancas[k][2];
+  }
+
+  cargar(contenedor, i, j) {
+    let posicion = [i, j];
+    if (this.tablero[i][j] !== undefined && this.tablero[i][j] !== 0) {
+      let tipo = this.tablero[i][j];
+      console.log(typeof tipo);
+      if (typeof tipo !== "string") {
+        this.cargarcasilla(contenedor, posicion);
+        tipo.pintarEnTablero();
+        return tipo;
+      } else {
         try {
-          return this.cargarFicha(tipo, "B", [i, j]);
+          let color = tipo === tipo.toUpperCase() ? "B" : "N";
+          return this.cargarFicha(contenedor, tipo, color, [i, j]);
         } catch (error) {
           console.log(
             `No se pudieron cargar las ficha: ${tipo} error: `,
             error.message
           );
         }
-        //return blancas[k][2];
-      }
-      if (negras[k][0] == i && negras[k][1] == j) {
-        let tipo = negras[k][2];
-        try {
-          return this.cargarFicha(tipo, "N", [i, j]);
-        } catch (error) {
-          console.log(
-            `No se pudieron cargar las ficha: ${tipo} error: `,
-            error.message
-          );
-        }
-        //return negras[k][2];
       }
     }
-    return 0;
+    return this.cargarFicha(contenedor, 0, 0, [i, j]);
   }
 
   posiblesMovimientos(cid) {
     //Casilla id
+    this.ficha = this.getFichaById(cid);
+    return this.ficha.posiblesMovimientos(this.tablero);
+  }
+
+  getFichaById(cid) {
     const i = parseInt(cid.charAt(1));
     const j = parseInt(cid.charAt(2));
-    this.ficha = this.tablero[i][j];
-    return this.ficha.posiblesMovimientos(this.tablero);
+    return this.tablero[i][j];
   }
 
   borrarFicha(i, j) {
@@ -148,16 +130,24 @@ class tablero {
     casilla.textContent = "";
   }
 
-  mover(ficha, i, j) {
-    let x = ficha.posicion[0];
-    let y = ficha.posicion[1];
-    this.tablero[x][y] = 0;
-    this.borrarFicha(x, y);
+  //posibles = [[1,2],[1,1],[0,0],[3,4]]
+  mover(ficha, cid, posibles, juego) {
+    const i = parseInt(cid.charAt(1));
+    const j = parseInt(cid.charAt(2));
+    if (posibles.some((coord) => coord[0] === i && coord[1] === j)) {
+      let x = ficha.posicion[0];
+      let y = ficha.posicion[1];
+      this.tablero[x][y] = 0;
+      this.borrarFicha(x, y);
 
-    this.tablero[i][j] = ficha;
-    ficha.posicion = [i, j];
+      this.tablero[i][j] = ficha;
+      ficha.posicion = [i, j];
 
-    ficha.pintarEnTablero();
-    console.log(this.tablero);
+      ficha.pintarEnTablero();
+      console.log(this.tablero);
+    }
+    juego.contenedor.innerHTML = "";
+    this.rellenar(juego.contenedor);
+    juego.pintarTablero();
   }
 }

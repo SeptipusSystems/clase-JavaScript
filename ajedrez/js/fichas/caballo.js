@@ -1,4 +1,5 @@
-class caballo extends ficha {
+import { Ficha } from "./ficha.js";
+export class Caballo extends Ficha {
   constructor(color, posicion = [0, 0]) {
     super(color, posicion);
     this.tipo = "C";

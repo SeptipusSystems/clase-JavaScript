@@ -1,4 +1,4 @@
-class ficha {
+export class Ficha {
   constructor(color, posicion = [0, 0]) {
     this.color = color;
     this.posicion = posicion;
