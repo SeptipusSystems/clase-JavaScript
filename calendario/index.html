@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calendario</title>
+    <style>
+      #calendario {
+        margin: 50px;
+      }
+
+      .dia {
+        background-color: #fe0;
+      }
+
+      span {
+        display: inline-grid;
+        width: 40px;
+        height: 40px;
+        border: solid 1px #fe0;
+        text-align: center;
+        align-content: center;
+      }
+    </style>
+    <script>
+      function calcularDiaSemana(ano, mes, dia) {
+        let m = mes; // Mes
+        // Ajustar el mes y el año según la fórmula de Zeller
+        /*  if (mes < 3) {
+              m = mes + 12;
+              ano -= 1;
+            }*/
+
+        const q = dia; // Día del mes
+        const K = ano % 100; // Año del siglo
+        const J = Math.floor(ano / 100); // Siglo del año
+
+        // Fórmula de Zeller
+        let h =
+          (q +
+            Math.floor((13 * (m + 1)) / 5) +
+            K +
+            Math.floor(K / 4) +
+            Math.floor(J / 4) -
+            2 * J) %
+          7;
+
+        h = (h + 6) % 7;
+
+        return h;
+      }
+
+      function pintarCalendario(año, mes) {
+        let numeroDias = new Date(año, mes, 0).getDate();
+        let principioMes = calcularDiaSemana(año, mes, 1); //new Date(año, mes - 1, 1).getDay(); //
+        let calendario = document.getElementById("calendario");
+        calendario.innerHTML = "";
+        let semana = document.createElement("div");
+        ["D", "L", "M", "W", "J", "V", "S"].forEach((dia) => {
+          let divDia = document.createElement("span");
+          divDia.className = "dia";
+          divDia.textContent = dia;
+          semana.appendChild(divDia);
+        });
+        calendario.appendChild(semana);
+
+        [1, 2, 3, 4, 5, 6].forEach((s) => {
+          let i = s * 7 - 6;
+          let semana = document.createElement("div");
+          ["D", "L", "M", "W", "J", "V", "S"].forEach((dia) => {
+            if (i <= numeroDias + principioMes) {
+              let divDia = document.createElement("span");
+              if (i > principioMes) {
+                divDia.textContent = i - principioMes;
+              } else {
+                divDia.textContent = ".";
+              }
+              semana.appendChild(divDia);
+            }
+            i++;
+          });
+          calendario.appendChild(semana);
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        pintarCalendario(2023, 1);
+        let boton = document.getElementById("calcular");
+        boton.addEventListener("click", function () {
+          let año = document.getElementById("año").value;
+          let mes = document.getElementById("mes").value;
+          console.log(año, mes);
+          pintarCalendario(año, mes);
+        });
+      });
+
+      const myObject = {
+        1: 0,
+        2: 2,
+        3: 2,
+        4: 6,
+        5: 1,
+        6: 4,
+        7: 6,
+        8: 2,
+        9: 5,
+        10: 0,
+        11: 3,
+        12: 5,
+      };
+      for (const mes in myObject) {
+        const dia = myObject[mes];
+        let añop = 2023;
+        console.log(calcularDiaSemana(añop, mes, 1), dia);
+      }
+    </script>
+  </head>
+  <body>
+    <label for="año">Año</label>
+    <input type="text" id="año" />
+    <label for="mes">Mes</label>
+    <select id="mes">
+      <option value="1">Enero</option>
+      <option value="2">Febrero</option>
+      <option value="3">Marzo</option>
+      <option value="4">Abril</option>
+      <option value="5">Mayo</option>
+      <option value="6">Junio</option>
+      <option value="7">Julio</option>
+      <option value="8">Agosto</option>
+      <option value="9">Septiembre</option>
+      <option value="10">Octubre</option>
+      <option value="11">Noviembre</option>
+      <option value="12">Diciembre</option>
+    </select>
+    <button id="calcular">Mostrar</button>
+    <div id="calendario"></div>
+  </body>
+</html>
