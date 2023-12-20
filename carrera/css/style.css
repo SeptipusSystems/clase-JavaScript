@@ -1,0 +1,32 @@
+.pista {
+  background-image: url("../img/pista-02.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 485px;
+  height: 425px;
+}
+
+.corredor {
+  transition: transform 0.1s ease-in-out;
+  width: 10px;
+  height: 10px;
+}
+
+#corredor1 {
+  background-color: blue;
+  position: absolute;
+  transform: rotate(4.6rad);
+  top: 315px;
+  left: 220px;
+}
+#corredor2 {
+  background-color: brown;
+  position: absolute;
+  transform: rotate(4.6rad);
+  top: 335px;
+  left: 220px;
+}
+.corredor img {
+  width: 100%;
+}
